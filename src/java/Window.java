@@ -1,11 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
 
+//window class — essentially just a frame and a board
+
 public class Window implements Runnable{
     JFrame frame;
     Board board;
 
-    public Window(){
+    public Window(){ // constructor — sets everything up
         frame = new JFrame("frame");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -18,8 +20,9 @@ public class Window implements Runnable{
         frame.setVisible(true);
     }
 
-    public void run(){
-        board.run();
+    public String run(){
+        board.run(); // run — most of the game is called here
+        return toString() + " running";
     }
     
 }

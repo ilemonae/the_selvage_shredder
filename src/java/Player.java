@@ -1,25 +1,24 @@
 import java.awt.*;
 
-public class Player implements Entity{
+public class Player implements Entity{ // player class - an ordinary entity, the only departure from the location, sprite, behaviour pattern is that it has acess to the key-detection in board
     private int x;
     private int y;
     private Board board;
     private Sprite sprite;
 
-    public Player(Board board, int x, int y, Sprite sprite){
-        this.board = board;
+    public Player(int x, int y, Sprite sprite){ // constructor — essentially just location and sprite
         this.x = x;
         this.y = y;
         this.sprite = sprite;
     }
 
     @Override
-    public void run(){
-        
+    public String run(){ // run — behaviour, key detection and physics essentially, also checks for game over
+        return toString() + " running";
     }
 
     @Override
-    public int getX(){
+    public int getX(){ // get x/y — for telling board where to draw things
         return x;
     }
 
@@ -29,7 +28,12 @@ public class Player implements Entity{
     }
 
     @Override
-    public Color getPixel(int x, int y){
+    public Color getPixel(int x, int y){ // get pixel — for telling board when and what colour to draw
         return sprite.getPixel(x, y);
+    }
+
+    @Override
+    public void addBoard(Board board){ // add board — get a reference to the board for key detection
+        this.board = board;
     }
 }
