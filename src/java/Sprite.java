@@ -16,7 +16,7 @@ public class Sprite extends ArrayList<ArrayList<Color>> implements Palette{ //sp
         return get(x).get(y);
     }
 
-    private void setPixel(int x, int y, Color color){
+    public void setPixel(int x, int y, Color color){
         get(x).set(y, color);
     }
 

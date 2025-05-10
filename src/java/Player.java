@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class Player implements Entity{ // player class - an ordinary entity, the only departure from the location, sprite, behaviour pattern is that it has acess to the key-detection in board
+public class Player implements Entity, Palette{ // player class - an ordinary entity, the only departure from the location, sprite, behaviour pattern is that it has acess to the key-detection in board
     private int x;
     private int y;
     private Board board;
@@ -14,6 +14,9 @@ public class Player implements Entity{ // player class - an ordinary entity, the
 
     @Override
     public String run(){ // run — behaviour, key detection and physics essentially, also checks for game over
+        if (board.getKeySpace()){
+            jump();
+        }
         return toString() + " running";
     }
 
@@ -35,5 +38,9 @@ public class Player implements Entity{ // player class - an ordinary entity, the
     @Override
     public void addBoard(Board board){ // add board — get a reference to the board for key detection
         this.board = board;
+    }
+
+    public void jump(){
+        sprite.fill(bu);
     }
 }
