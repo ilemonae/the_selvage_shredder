@@ -1,7 +1,10 @@
-# the_selvage_shredder
-shouldn't have any dependencies
+# the_selvage_shredder - ap csa final project
 
-make sure to fullscreen
+you shouldn't have to install any dependencies... only uses awt and swing.
+
+hopefully i will add a standalone executable anyways
+
+make sure to fullscreen—the screen doesn't scale, so you won't see the whole thing if you don't
 
 controls are space and arrow keys/wasd
 
@@ -11,7 +14,7 @@ controls are space and arrow keys/wasd
 
 
 
-# pseudo code (probably out of date)
+# initial pseudo code (probably out of date)
 //window class — esseintially just a frame and a board
 // constructor — sets everything up
 // run — most of the game is called here

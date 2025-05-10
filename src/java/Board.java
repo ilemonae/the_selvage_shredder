@@ -1,9 +1,10 @@
 import java.awt.*;
 import javax.swing.*;
+import java.awt.event.*;
 
 // board class — subclasses panel; essentially handles everything inside the window... most of the game is here, it's like the "real" main. the board is has quantised locations, like an ascii art game except it's not ascii... made this descision b/c otherwise the scale to speed up development
 
-public class Board extends JPanel implements Palette, Runnable{ 
+public class Board extends JPanel implements Palette, Runnable, KeyListener{ 
     private double genesisTime;
     private static double fps = 60;
     private static int localOriginX = 160;
@@ -14,7 +15,10 @@ public class Board extends JPanel implements Palette, Runnable{
     
     public Board(){ //constructor - sets everything up, initialises entities etc. (time also starts here);
         super();
+        setFocusable(true);
+        addKeyListener(this);
         genesisTime = System.currentTimeMillis();
+
 
 
 
@@ -36,7 +40,7 @@ public class Board extends JPanel implements Palette, Runnable{
         pen.drawRect(localOriginX-1,localOriginY - 1,PIXEL_WIDTH*SPRITE_WIDTH*width + 1, PIXEL_HEIGHT*SPRITE_HEIGHT*height + 1);
     }
 
-    private int getTime(){ // get time — time is kept track here – timer begins when board constructer is called
+    public int getTime(){ // get time — time is kept track here – timer begins when board constructer is called
         return (int) (System.currentTimeMillis() - genesisTime);
     }
 
@@ -65,9 +69,23 @@ public class Board extends JPanel implements Palette, Runnable{
         }
     }
 
-    // get key — player behaviour is influenced by input, hence reference is needed
+    // get key — player behaviour is influenced by input, hence reference is needed; only one key can be pressed at a time, but that is ok for this small scale program.
 
-    // key pressed/released etc. — updates get key
+    @Override
+    public void keyTyped(KeyEvent e){// i'm choosing not to implement this, but it needs to be here for the interface
+        int key = e.getKeyChar();
+        System.out.println(key + " typed");
+    }
+    @Override
+    public void keyPressed(KeyEvent e){ // key pressed/released etc. — updates get key
+        int key = e.getKeyChar();
+        System.out.println(key + " pressed");
+    }
+    @Override
+    public void keyReleased(KeyEvent e){ // key pressed/released etc. — updates get key
+        int key = e.getKeyChar();
+        System.out.println(key + " released");
+    }
 
     // spawn obstacle — initiallises obsticles at specific but also to an extent randomized intervals
     
