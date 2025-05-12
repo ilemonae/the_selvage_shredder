@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Board extends JPanel implements Palette, Runnable, KeyListener{ 
     private double genesisTime;
-    private static double fps = 60;
+    private static double fps = 30;
     private static int localOriginX = 160;
     private static int localOriginY = 58;
     private static int height = 7;
@@ -21,6 +21,9 @@ public class Board extends JPanel implements Palette, Runnable, KeyListener{
 
     public Sprite playerSprite;
     public Sprite playerSprite2;
+    ArrayList<Sprite> playerSpriteSheet;
+
+    
 
     
     public Board(){ //constructor - sets everything up, initialises entities etc. (time also starts here);
@@ -37,8 +40,16 @@ public class Board extends JPanel implements Palette, Runnable, KeyListener{
         playerSprite2 = genSprite;
         }
         
-        player =  new Player(2,6,playerSprite);
+        playerSpriteSheet = new ArrayList<Sprite>();
+        playerSpriteSheet.add(playerSprite);
+        playerSpriteSheet.add(playerSprite2);
+
+
+
+        player =  new Player(1,6,playerSpriteSheet);
         player.addBoard(this);
+
+        player.addPhysics(new Physics(player, this));
 
 
     }
@@ -58,9 +69,11 @@ public class Board extends JPanel implements Palette, Runnable, KeyListener{
     public String run(){ // run — meat of what is called in the loop in main. entity behaviours, key detection, etc.
         if (getTime() % (int)(1/(fps/1000)) == 0){
             repaint();
+            
+            
         }
-            player.run();
-            return toString() + " running";
+        player.run();
+        return toString() + " running";   
     }
 
     private int getRealX(int boardX, int pixelX){ // get x/y — figureing out where to draw things on the screen relative to the quantised positions on the board

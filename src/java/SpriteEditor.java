@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 public class SpriteEditor extends JFrame implements Palette{
     private static final int SPRITE_WIDTH = 16; // Width of the sprite in pixels

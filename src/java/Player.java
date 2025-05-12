@@ -1,22 +1,33 @@
 import java.awt.*;
+import java.util.*;
 
-public class Player implements Entity, Palette{ // player class - an ordinary entity, the only departure from the location, sprite, behaviour pattern is that it has acess to the key-detection in board
+public class Player implements Entity, Palette, UsesPhysics{ // player class - an ordinary entity, the only departure from the location, sprite, behaviour pattern is that it has acess to the key-detection in board
     private int x;
     private int y;
     private Board board;
+    private ArrayList<Sprite> spriteSheet;
     private Sprite sprite;
+    private Physics physics;
 
-    public Player(int x, int y, Sprite sprite){ // constructor — essentially just location and sprite
+    public Player(int x, int y, ArrayList<Sprite> spriteSheet){ // constructor — essentially just location and sprite
         this.x = x;
         this.y = y;
-        this.sprite = sprite;
+        this.spriteSheet = spriteSheet;
+        this.sprite = spriteSheet.get(0); // default sprite
     }
 
+    public void addPhysics(Physics physics){ // add physics — get a reference to the physics for gravity
+        this.physics = physics;
+    }
+
+
     @Override
-    public String run(){ // run — behaviour, key detection and physics essentially, also checks for game over
+    public String run(){// run — behaviour, key detection and physics essentially, also checks for game over
         if (board.getKeySpace()){
+
             jump();
         }
+        physics.run();
         return toString() + " running";
     }
 
@@ -31,6 +42,11 @@ public class Player implements Entity, Palette{ // player class - an ordinary en
     }
 
     @Override
+    public void setY(int y){ // set y — for telling board where to draw things
+        this.y = y;
+    }
+
+    @Override
     public Color getPixel(int x, int y){ // get pixel — for telling board when and what colour to draw
         return sprite.getPixel(x, y);
     }
@@ -41,6 +57,7 @@ public class Player implements Entity, Palette{ // player class - an ordinary en
     }
 
     public void jump(){
-        sprite.fill(bu);
+        sprite = spriteSheet.get(1); // change to jump sprite
+        physics.jump();
     }
 }
