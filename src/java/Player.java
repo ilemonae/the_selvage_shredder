@@ -24,7 +24,6 @@ public class Player implements Entity, Palette, UsesPhysics{ // player class - a
     @Override
     public String run(){// run — behaviour, key detection and physics essentially, also checks for game over
         if (board.getKeySpace()){
-
             jump();
         }
         physics.run();
@@ -57,7 +56,10 @@ public class Player implements Entity, Palette, UsesPhysics{ // player class - a
     }
 
     public void jump(){
-        sprite = spriteSheet.get(1); // change to jump sprite
         physics.jump();
+    }
+    @Override
+    public void setSprite(int i){
+        sprite = spriteSheet.get(i); // set sprite — for changing sprites
     }
 }

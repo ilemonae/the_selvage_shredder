@@ -1,43 +1,75 @@
-import java.lang.Math;
-
 public class Physics implements Runnable{// physics class — handles gravity, especially the annoyance of acceleration
-    private int acceleration;
-    UsesPhysics user;
-    boolean grounded = true;
-    Board board;
+    private double timeToFallNext;
+    private boolean grounded;
+    private boolean movingUp;
+    private Board board;
+    private UsesPhysics user;
+    private static int s = 20;
 
     public Physics(UsesPhysics user, Board board) {
-        this.acceleration = -5;
-        this.velocity = 0;
-        this.user = user;
         this.board = board;
+        this.user = user;
+        grounded = true;
     }
 
 
     public String run(){
-        grounded = (user.getY() == 6);
         fall();
-        return toString() + " running";
+        return "Physics is running";
     }
 
     public void jump(){
-        if (grounded)
-            acceleration = 5; // reverse gravity
+        if (grounded && timeToFallNext <= board.getTime()){
+            user.setSprite(1);
+            grounded = false;
+            movingUp = true;
+            timeToFallNext = board.getTime(); // time to fall next
+        }
     }
 
-    public void fall(){ // gravity enacted
-        if (!grounded || acceleration >= 0){ // the one case where no movement happens is when gravity is pushing down and we are already on the ground
-            System.out.println("time: " + board.getTime() /1000 + " acceleration: " + acceleration + " abs: " + (6-Math.abs(acceleration)) + " true: " + (board.getTime() *1000 % ((6-Math.abs(acceleration))) == 0));
-            if (board.getTime() /1000 % ((6-Math.abs(acceleration))) == 0){            
-                if (acceleration > 0){
-                    user.setY(user.getY() - 1);
-                } else {
-                    
-                    user.setY(user.getY() + 1);
+    public void fall(){ // i got frustrated and ran out of time, so this is an unscalable, awful, hardcoded mess... funnily enough for this scale it was faster
+        if (!grounded && timeToFallNext <= board.getTime()){
+            if (movingUp){
+                if (user.getY() == 6){
+                    user.setY(5);
+                    timeToFallNext = board.getTime() + 2 *s;
+
+                } else if (user.getY() == 5){
+                    user.setY(4);
+                    timeToFallNext = board.getTime() + 3 * s;
+                } else if (user.getY() == 4){
+                    user.setY(3);
+                    timeToFallNext = board.getTime() + 4 * s;
+                } else if (user.getY() == 3){
+                    user.setY(2);
+                    timeToFallNext = board.getTime() + 5 * s;
+                } else if (user.getY() == 2){
+                    user.setY(1);
+                    timeToFallNext = board.getTime() + 10 * s;
+                    movingUp = false;
                 }
-                acceleration = acceleration - 1;;
-                if (acceleration < -5){
-                    acceleration = -5;
+            } else {
+                if (user.getY() == 5){
+                    user.setY(6);
+                    timeToFallNext = board.getTime() + 2 * s;
+                    grounded = true;
+                    user.setSprite(0);
+                }
+                if (user.getY() == 4){
+                    user.setY(5);
+                    timeToFallNext = board.getTime() + 2*s;
+                }
+                if (user.getY() == 3){
+                    user.setY(4);
+                    timeToFallNext = board.getTime() + 3 * s;
+                }
+                if (user.getY() == 2){
+                    user.setY(3);
+                    timeToFallNext = board.getTime() + 4 * s;
+                }
+                if (user.getY() == 1){
+                    user.setY(2);
+                    timeToFallNext = board.getTime() + 5 * s;
                 }
             }
         }
