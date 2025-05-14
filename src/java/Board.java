@@ -1,13 +1,13 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.ArrayList;
+import java.util.*;
 
 // board class — subclasses panel; essentially handles everything inside the window... most of the game is here, it's like the "real" main. the board is has quantised locations, like an ascii art game except it's not ascii... made this descision b/c otherwise the scale to speed up development
 
 public class Board extends JPanel implements Palette, Runnable, KeyListener{ 
     private double genesisTime;
-    private static double fps = 30;
+    private static double fps = 24;
     private static int localOriginX = 160;
     private static int localOriginY = 58;
     private static int height = 7;
@@ -17,11 +17,17 @@ public class Board extends JPanel implements Palette, Runnable, KeyListener{
     private boolean getKeyS = false;
     private boolean getKeyD = false;
     private boolean getKeySpace = false;
-    Player player;
+    private Player player;
 
-    public Sprite playerSprite;
-    public Sprite playerSprite2;
-    ArrayList<Sprite> playerSpriteSheet;
+    private Sprite playerSprite;
+    private Sprite playerSprite2;
+    private ArrayList<Sprite> playerSpriteSheet;
+
+    private Sprite obstacleSprite;
+    public ArrayList<Obstacle> obstacles;
+
+    private int spawnNext;
+    private int spawnNextMin;
 
     
 
@@ -44,12 +50,18 @@ public class Board extends JPanel implements Palette, Runnable, KeyListener{
         playerSpriteSheet.add(playerSprite);
         playerSpriteSheet.add(playerSprite2);
 
+        for (int i = 1; i <2; i++){
+            Sprite genSprite = new Sprite();genSprite.clear();ArrayList<Color> subl0 = new ArrayList<Color>(); subl0.add(new Color(255,255,255));subl0.add(new Color(255,255,255));subl0.add(new Color(255,255,255));subl0.add(new Color(255,255,255));subl0.add(new Color(255,255,255));subl0.add(new Color(255,255,255));subl0.add(new Color(255,255,255));subl0.add(new Color(255,255,255));subl0.add(new Color(255,255,255));subl0.add(new Color(255,255,255));subl0.add(new Color(255,255,255));subl0.add(new Color(255,255,255));subl0.add(new Color(255,255,255));subl0.add(new Color(62,71,114));subl0.add(new Color(62,71,114));subl0.add(new Color(62,71,114));genSprite.add(subl0);ArrayList<Color> subl1 = new ArrayList<Color>(); subl1.add(new Color(255,255,255));subl1.add(new Color(255,255,255));subl1.add(new Color(255,255,255));subl1.add(new Color(255,255,255));subl1.add(new Color(255,255,255));subl1.add(new Color(255,255,255));subl1.add(new Color(255,255,255));subl1.add(new Color(255,255,255));subl1.add(new Color(255,255,255));subl1.add(new Color(255,255,255));subl1.add(new Color(255,255,255));subl1.add(new Color(62,71,114));subl1.add(new Color(62,71,114));subl1.add(new Color(167,199,231));subl1.add(new Color(167,199,231));subl1.add(new Color(167,199,231));genSprite.add(subl1);ArrayList<Color> subl2 = new ArrayList<Color>(); subl2.add(new Color(255,255,255));subl2.add(new Color(255,255,255));subl2.add(new Color(255,255,255));subl2.add(new Color(255,255,255));subl2.add(new Color(255,255,255));subl2.add(new Color(255,255,255));subl2.add(new Color(255,255,255));subl2.add(new Color(255,255,255));subl2.add(new Color(255,255,255));subl2.add(new Color(62,71,114));subl2.add(new Color(62,71,114));subl2.add(new Color(167,199,231));subl2.add(new Color(167,199,231));subl2.add(new Color(255,255,255));subl2.add(new Color(255,255,255));subl2.add(new Color(255,255,255));genSprite.add(subl2);ArrayList<Color> subl3 = new ArrayList<Color>(); subl3.add(new Color(255,255,255));subl3.add(new Color(255,255,255));subl3.add(new Color(255,255,255));subl3.add(new Color(255,255,255));subl3.add(new Color(255,255,255));subl3.add(new Color(255,255,255));subl3.add(new Color(255,255,255));subl3.add(new Color(62,71,114));subl3.add(new Color(62,71,114));subl3.add(new Color(167,199,231));subl3.add(new Color(167,199,231));subl3.add(new Color(255,255,255));subl3.add(new Color(255,255,255));subl3.add(new Color(255,255,255));subl3.add(new Color(255,255,255));subl3.add(new Color(255,255,255));genSprite.add(subl3);ArrayList<Color> subl4 = new ArrayList<Color>(); subl4.add(new Color(255,255,255));subl4.add(new Color(255,255,255));subl4.add(new Color(255,255,255));subl4.add(new Color(255,255,255));subl4.add(new Color(255,255,255));subl4.add(new Color(62,71,114));subl4.add(new Color(62,71,114));subl4.add(new Color(167,199,231));subl4.add(new Color(167,199,231));subl4.add(new Color(255,255,255));subl4.add(new Color(255,255,255));subl4.add(new Color(255,255,255));subl4.add(new Color(255,255,255));subl4.add(new Color(255,255,255));subl4.add(new Color(255,255,255));subl4.add(new Color(255,255,255));genSprite.add(subl4);ArrayList<Color> subl5 = new ArrayList<Color>(); subl5.add(new Color(255,255,255));subl5.add(new Color(255,255,255));subl5.add(new Color(255,255,255));subl5.add(new Color(62,71,114));subl5.add(new Color(62,71,114));subl5.add(new Color(167,199,231));subl5.add(new Color(167,199,231));subl5.add(new Color(255,255,255));subl5.add(new Color(255,255,255));subl5.add(new Color(255,255,255));subl5.add(new Color(255,255,255));subl5.add(new Color(255,255,255));subl5.add(new Color(255,255,255));subl5.add(new Color(255,255,255));subl5.add(new Color(255,255,255));subl5.add(new Color(255,255,255));genSprite.add(subl5);ArrayList<Color> subl6 = new ArrayList<Color>(); subl6.add(new Color(255,255,255));subl6.add(new Color(62,71,114));subl6.add(new Color(62,71,114));subl6.add(new Color(167,199,231));subl6.add(new Color(167,199,231));subl6.add(new Color(255,255,255));subl6.add(new Color(255,255,255));subl6.add(new Color(255,255,255));subl6.add(new Color(255,255,255));subl6.add(new Color(255,255,255));subl6.add(new Color(255,255,255));subl6.add(new Color(255,255,255));subl6.add(new Color(255,255,255));subl6.add(new Color(255,255,255));subl6.add(new Color(255,255,255));subl6.add(new Color(255,255,255));genSprite.add(subl6);ArrayList<Color> subl7 = new ArrayList<Color>(); subl7.add(new Color(62,71,114));subl7.add(new Color(167,199,231));subl7.add(new Color(167,199,231));subl7.add(new Color(255,255,255));subl7.add(new Color(255,255,255));subl7.add(new Color(255,255,255));subl7.add(new Color(255,255,255));subl7.add(new Color(255,255,255));subl7.add(new Color(255,255,255));subl7.add(new Color(255,255,255));subl7.add(new Color(255,255,255));subl7.add(new Color(255,255,255));subl7.add(new Color(255,255,255));subl7.add(new Color(255,255,255));subl7.add(new Color(255,255,255));subl7.add(new Color(255,255,255));genSprite.add(subl7);ArrayList<Color> subl8 = new ArrayList<Color>(); subl8.add(new Color(62,71,114));subl8.add(new Color(255,255,255));subl8.add(new Color(255,255,255));subl8.add(new Color(255,255,255));subl8.add(new Color(255,255,255));subl8.add(new Color(255,255,255));subl8.add(new Color(255,255,255));subl8.add(new Color(255,255,255));subl8.add(new Color(255,255,255));subl8.add(new Color(255,255,255));subl8.add(new Color(255,255,255));subl8.add(new Color(255,255,255));subl8.add(new Color(255,255,255));subl8.add(new Color(255,255,255));subl8.add(new Color(255,255,255));subl8.add(new Color(255,255,255));genSprite.add(subl8);ArrayList<Color> subl9 = new ArrayList<Color>(); subl9.add(new Color(255,255,255));subl9.add(new Color(62,71,114));subl9.add(new Color(62,71,114));subl9.add(new Color(255,255,255));subl9.add(new Color(255,255,255));subl9.add(new Color(255,255,255));subl9.add(new Color(255,255,255));subl9.add(new Color(255,255,255));subl9.add(new Color(255,255,255));subl9.add(new Color(255,255,255));subl9.add(new Color(255,255,255));subl9.add(new Color(255,255,255));subl9.add(new Color(255,255,255));subl9.add(new Color(255,255,255));subl9.add(new Color(255,255,255));subl9.add(new Color(255,255,255));genSprite.add(subl9);ArrayList<Color> subl10 = new ArrayList<Color>(); subl10.add(new Color(255,255,255));subl10.add(new Color(255,255,255));subl10.add(new Color(255,255,255));subl10.add(new Color(62,71,114));subl10.add(new Color(62,71,114));subl10.add(new Color(255,255,255));subl10.add(new Color(255,255,255));subl10.add(new Color(255,255,255));subl10.add(new Color(255,255,255));subl10.add(new Color(255,255,255));subl10.add(new Color(255,255,255));subl10.add(new Color(255,255,255));subl10.add(new Color(255,255,255));subl10.add(new Color(255,255,255));subl10.add(new Color(255,255,255));subl10.add(new Color(255,255,255));genSprite.add(subl10);ArrayList<Color> subl11 = new ArrayList<Color>(); subl11.add(new Color(255,255,255));subl11.add(new Color(255,255,255));subl11.add(new Color(255,255,255));subl11.add(new Color(255,255,255));subl11.add(new Color(255,255,255));subl11.add(new Color(62,71,114));subl11.add(new Color(62,71,114));subl11.add(new Color(255,255,255));subl11.add(new Color(255,255,255));subl11.add(new Color(255,255,255));subl11.add(new Color(255,255,255));subl11.add(new Color(255,255,255));subl11.add(new Color(255,255,255));subl11.add(new Color(255,255,255));subl11.add(new Color(255,255,255));subl11.add(new Color(255,255,255));genSprite.add(subl11);ArrayList<Color> subl12 = new ArrayList<Color>(); subl12.add(new Color(255,255,255));subl12.add(new Color(255,255,255));subl12.add(new Color(255,255,255));subl12.add(new Color(255,255,255));subl12.add(new Color(255,255,255));subl12.add(new Color(255,255,255));subl12.add(new Color(255,255,255));subl12.add(new Color(62,71,114));subl12.add(new Color(62,71,114));subl12.add(new Color(255,255,255));subl12.add(new Color(255,255,255));subl12.add(new Color(255,255,255));subl12.add(new Color(255,255,255));subl12.add(new Color(255,255,255));subl12.add(new Color(255,255,255));subl12.add(new Color(255,255,255));genSprite.add(subl12);ArrayList<Color> subl13 = new ArrayList<Color>(); subl13.add(new Color(255,255,255));subl13.add(new Color(255,255,255));subl13.add(new Color(255,255,255));subl13.add(new Color(255,255,255));subl13.add(new Color(255,255,255));subl13.add(new Color(255,255,255));subl13.add(new Color(255,255,255));subl13.add(new Color(255,255,255));subl13.add(new Color(255,255,255));subl13.add(new Color(62,71,114));subl13.add(new Color(62,71,114));subl13.add(new Color(255,255,255));subl13.add(new Color(255,255,255));subl13.add(new Color(255,255,255));subl13.add(new Color(255,255,255));subl13.add(new Color(255,255,255));genSprite.add(subl13);ArrayList<Color> subl14 = new ArrayList<Color>(); subl14.add(new Color(255,255,255));subl14.add(new Color(255,255,255));subl14.add(new Color(255,255,255));subl14.add(new Color(255,255,255));subl14.add(new Color(255,255,255));subl14.add(new Color(255,255,255));subl14.add(new Color(255,255,255));subl14.add(new Color(255,255,255));subl14.add(new Color(255,255,255));subl14.add(new Color(255,255,255));subl14.add(new Color(255,255,255));subl14.add(new Color(62,71,114));subl14.add(new Color(62,71,114));subl14.add(new Color(255,255,255));subl14.add(new Color(255,255,255));subl14.add(new Color(255,255,255));genSprite.add(subl14);ArrayList<Color> subl15 = new ArrayList<Color>(); subl15.add(new Color(255,255,255));subl15.add(new Color(255,255,255));subl15.add(new Color(255,255,255));subl15.add(new Color(255,255,255));subl15.add(new Color(255,255,255));subl15.add(new Color(255,255,255));subl15.add(new Color(255,255,255));subl15.add(new Color(255,255,255));subl15.add(new Color(255,255,255));subl15.add(new Color(255,255,255));subl15.add(new Color(255,255,255));subl15.add(new Color(255,255,255));subl15.add(new Color(255,255,255));subl15.add(new Color(62,71,114));subl15.add(new Color(62,71,114));subl15.add(new Color(62,71,114));genSprite.add(subl15);
+            obstacleSprite = genSprite;
+        }
 
-
-        player =  new Player(1,6,playerSpriteSheet);
+        player =  new Player(3,6,playerSpriteSheet);
         player.addBoard(this);
 
         player.addPhysics(new Physics(player, this));
+
+        obstacles = new ArrayList<Obstacle>();
+        spawnNext = getTime() + 3000;
 
 
     }
@@ -60,6 +72,9 @@ public class Board extends JPanel implements Palette, Runnable, KeyListener{
         pen.setColor(bl);
         pen.drawRect(localOriginX-1,localOriginY - 1,PIXEL_WIDTH*SPRITE_WIDTH*width + 1, PIXEL_HEIGHT*SPRITE_HEIGHT*height + 1);
         drawEntity(player, pen);
+        for (Obstacle obstacle : obstacles){
+            drawEntity(obstacle, pen);
+        }
     }
 
     public int getTime(){ // get time — time is kept track here – timer begins when board constructer is called
@@ -68,11 +83,20 @@ public class Board extends JPanel implements Palette, Runnable, KeyListener{
 
     public String run(){ // run — meat of what is called in the loop in main. entity behaviours, key detection, etc.
         if (getTime() % (int)(1/(fps/1000)) == 0){
-            repaint();
+            repaint(); 
             
-            
+            Iterator<Obstacle> it = obstacles.iterator();
+            while (it.hasNext()){
+                Obstacle obstacle = it.next();
+                obstacle.run();
+                if (obstacle.getX() < 0){
+                    it.remove();
+                }
+            }
+            spawnObstacle();
         }
         player.run();
+        
         return toString() + " running";   
     }
 
@@ -159,7 +183,12 @@ public class Board extends JPanel implements Palette, Runnable, KeyListener{
     }
 
     // spawn obstacle — initiallises obsticles at specific but also to an extent randomized intervals
-    
+    private void spawnObstacle(){ // spawn obstacle — initiallises obsticles at specific but also to an extent randomized intervals
+        if (spawnNext <= getTime()){
+            obstacles.add(new Obstacle(this, obstacleSprite));
+            spawnNext = getTime() + Obstacle.getDelay() * 10;
+        }
+    }
     // calculate score — score based on current time
 
     // draw score - draws scoreboard

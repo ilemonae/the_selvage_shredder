@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.GraphicsEnvironment;
 import java.awt.*;
 
 //window class — essentially just a frame and a board
@@ -10,6 +11,9 @@ public class Window implements Runnable{
     public Window(){ // constructor — sets everything up
         frame = new JFrame("frame");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setUndecorated(true);
+        GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        device.setFullScreenWindow(frame);
 
         board = new Board();
         board.setPreferredSize(new Dimension(1441, 901));
