@@ -20,6 +20,10 @@ public class Player implements Entity, Palette, UsesPhysics{ // player class - a
         this.physics = physics;
     }
 
+    public void setSprite(ArrayList<Sprite> spriteSheet){ // set sprite — for changing sprites
+        this.spriteSheet = spriteSheet;
+    }
+
 
     @Override
     public String run(){// run — behaviour, key detection and physics essentially, also checks for game over

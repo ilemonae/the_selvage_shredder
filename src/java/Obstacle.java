@@ -25,6 +25,7 @@ public class Obstacle implements Entity{// obstacle class — an entity
             x--;
             timeToMoveNext = board.getTime() + delay;
         }
+        board.playerDown(this, x, 6);
         return "Obstacle is running";
     }// run — essentially rushes forward toward player until it goes off the screen then deletes itself
     
@@ -46,4 +47,8 @@ public class Obstacle implements Entity{// obstacle class — an entity
     static public int getDelay(){
         return delay;
     }
+
+    public void setSprite(Sprite sprite){
+        this.sprite = sprite;
+    } // set sprite — for changing sprites
 }
