@@ -9,7 +9,7 @@ public class Board extends JPanel implements Palette, Runnable, KeyListener{
     private double genesisTime;
     private static double fps = 24;
     private static int localOriginX = 160;
-    private static int localOriginY = 0;
+    private static int localOriginY = -20;
     private static int height = 7;
     private static int width = 10;
     private boolean getKeySpace = false;
