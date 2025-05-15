@@ -59,7 +59,7 @@ public class Board extends JPanel implements Palette, Runnable, KeyListener{
         player.addPhysics(new Physics(player, this));
 
         obstacles = new ArrayList<Obstacle>();
-        spawnNext = getTime() + 3000;
+        spawnNext = getTime() + 10000;
         consecutiveSpawnCount = 0;
         spawnNextMin = 4;
 

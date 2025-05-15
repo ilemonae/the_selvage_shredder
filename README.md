@@ -1,6 +1,6 @@
 # the_selvage_shredder - ap csa final project
 
-should fullscreen on its own, make sure to do so if it doesn't on its own...
+the game begins 10 seconds after the program is run - make sure you fullscreen in this time!!!
 
 space to jump
 
