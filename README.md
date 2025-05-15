@@ -1,6 +1,6 @@
 # the_selvage_shredder - ap csa final project
 
-make sure to full screen
+should fullscreen on its own, make sure to do so if it doesn't on its own...
 
 space to jump
 
