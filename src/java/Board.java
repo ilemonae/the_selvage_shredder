@@ -12,10 +12,6 @@ public class Board extends JPanel implements Palette, Runnable, KeyListener{
     private static int localOriginY = 58;
     private static int height = 7;
     private static int width = 10;
-    private boolean getKeyW = false;
-    private boolean getKeyA = false;
-    private boolean getKeyS = false;
-    private boolean getKeyD = false;
     private boolean getKeySpace = false;
     private Player player;
 
@@ -28,6 +24,7 @@ public class Board extends JPanel implements Palette, Runnable, KeyListener{
 
     private int spawnNext;
     private int spawnNextMin;
+    private int consecutiveSpawnCount;
 
     
 
@@ -62,7 +59,8 @@ public class Board extends JPanel implements Palette, Runnable, KeyListener{
 
         obstacles = new ArrayList<Obstacle>();
         spawnNext = getTime() + 3000;
-
+        consecutiveSpawnCount = 0;
+        spawnNextMin = 4;
 
     }
 
@@ -119,18 +117,7 @@ public class Board extends JPanel implements Palette, Runnable, KeyListener{
         }
     }
 
-    public boolean getKeyW(){// get key — player behaviour is influenced by input, hence reference is needed; only one key can be pressed at a time, but that is ok for this small scale program.
-        return getKeyW;
-    }
-    public boolean getKeyA(){
-        return getKeyA;
-    }
-    public boolean getKeyS(){
-        return getKeyS;
-    }
-    public boolean getKeyD(){
-        return getKeyD;
-    }
+
     public boolean getKeySpace(){
         return getKeySpace;
     }
@@ -141,42 +128,13 @@ public class Board extends JPanel implements Palette, Runnable, KeyListener{
     @Override
     public void keyPressed(KeyEvent e){ // key prealsssed/released etc. — updates get key
         int key = e.getKeyChar();
-        if (key == 119){
-            getKeyW = true;
-        }
-        if (key == 97){
-            getKeyA = true;
-        }
-        if (key == 115){
-            getKeyS = true;
-        }
-        if (key == 100){
-            getKeyD = true;
-        }
         if (key == 32){
             getKeySpace = true;
         }
     }
-    // 32: space bar
-    //119: w
-    //97: a
-    //115: s
-    //100: d
     @Override
     public void keyReleased(KeyEvent e){ // key pressed/released etc. — updates get key
         int key = e.getKeyChar();
-        if (key == 119){
-            getKeyW = false;
-        }
-        if (key == 97){
-            getKeyA = false;
-        }
-        if (key == 115){
-            getKeyS = false;
-        }
-        if (key == 100){
-            getKeyD = false;
-        }
         if (key == 32){
             getKeySpace = false;
         }
@@ -186,8 +144,14 @@ public class Board extends JPanel implements Palette, Runnable, KeyListener{
     private void spawnObstacle(){ // spawn obstacle — initiallises obsticles at specific but also to an extent randomized intervals
         if (spawnNext <= getTime()){
             obstacles.add(new Obstacle(this, obstacleSprite));
-            spawnNext = getTime() + Obstacle.getDelay() * 10;
+            if (consecutiveSpawnCount >0){
+                spawnNext = getTime() + Obstacle.getDelay();
+            } else {
+                spawnNext = getTime() + Obstacle.getDelay() * (spawnNextMin + (int)(Math.random() * 14));
+            }
         }
+        
+        
     }
     // calculate score — score based on current time
 
