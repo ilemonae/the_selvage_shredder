@@ -2,6 +2,6 @@
 
 the game begins 10 seconds after the program is run - make sure you fullscreen in this time!!!
 
-space to jump
+space to ollie
 
-jump over things for as long as you can
+ollie over things for as long as you can
